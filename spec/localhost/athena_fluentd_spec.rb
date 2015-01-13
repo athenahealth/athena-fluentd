@@ -45,7 +45,7 @@ end
 # Plugin tests.
 
 describe command('/usr/sbin/athena-fluentd-gem list') do
-  %W(td td-monitoring mongo webhdfs rewrite-tag-filter s3 scribe).each { |plugin|
+  %W(mongo webhdfs rewrite-tag-filter s3 scribe record-modifier elasticsearch).each { |plugin|
     its(:stdout) { should match Regexp.new("fluent-plugin-#{plugin}") }
   }
 end
