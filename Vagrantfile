@@ -18,16 +18,12 @@ Vagrant.configure('2') do |config|
 
   %w{
     ubuntu-10.04
-    ubuntu-10.04-i386
     ubuntu-12.04
-    ubuntu-12.04-i386
     ubuntu-14.04
     debian-6.0.10
     debian-7.7
-    centos-5.10
-    centos-5.10-i386
-    centos-6.5
-    centos-6.5-i386
+    centos-5.11
+    centos-6.6
     centos-7.0
   }.each_with_index do |platform, index|
     use_nfs = false
