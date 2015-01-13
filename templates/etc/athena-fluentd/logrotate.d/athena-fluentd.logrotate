@@ -4,7 +4,7 @@
   compress
   delaycompress
   notifempty
-  create 640 <%= project_name %> <%= project_name %>
+  create 644 <%= project_name %> <%= project_name %>
   sharedscripts
   postrotate
     pid=/var/run/<%= project_name %>/<%= project_name %>.pid

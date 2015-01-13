@@ -1,50 +1,50 @@
 require 'spec_helper'
 
-describe package('td-agent') do
+describe package('athena-fluentd') do
   it { should be_installed }
 end
 
-describe file('/etc/init.d/td-agent') do
+describe file('/etc/init.d/athena-fluentd') do
   it { should be_executable }
   it { should be_mode 755 }
 end
 
-describe file('/etc/td-agent') do
+describe file('/etc/athena-fluentd') do
   it { should be_directory }
 end
 
-describe file('/etc/td-agent/td-agent.conf') do
+describe file('/etc/athena-fluentd/athena-fluentd.conf') do
   it { should be_file }
   it { should contain '</match>' }
   it { should contain '</source>' }
 end
 
-%w(td-agent td-agent-gem td-agent-ui).each do |command|
+%w(athena-fluentd athena-fluentd-gem athena-fluentd-ui).each do |command|
   describe file("/usr/sbin/#{command}") do
     it { should be_executable }
     it { should be_mode 755 }
   end
 end
 
-describe file('/opt/td-agent') do
+describe file('/opt/athena-fluentd') do
   it { should be_directory }
 end
 
-describe group('td-agent') do 
+describe group('athena-fluentd') do 
   it { should exist }
 end
 
-describe user('td-agent') do 
+describe user('athena-fluentd') do 
   it { should exist }
 end
 
-describe user('td-agent') do 
-  it { should belong_to_group 'td-agent' }
+describe user('athena-fluentd') do 
+  it { should belong_to_group 'athena-fluentd' }
 end
 
 # Plugin tests.
 
-describe command('/usr/sbin/td-agent-gem list') do
+describe command('/usr/sbin/athena-fluentd-gem list') do
   %W(td td-monitoring mongo webhdfs rewrite-tag-filter s3 scribe).each { |plugin|
     its(:stdout) { should match Regexp.new("fluent-plugin-#{plugin}") }
   }

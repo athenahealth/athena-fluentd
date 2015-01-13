@@ -1,7 +1,8 @@
-name "td-agent"
+name "athena-fluentd"
 #version '' # git ref
 
 dependency "jemalloc"
+dependency "curl"
 dependency "ruby"
 dependency "nokogiri"
 dependency "fluentd"

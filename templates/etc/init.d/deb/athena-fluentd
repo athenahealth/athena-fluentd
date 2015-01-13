@@ -5,8 +5,8 @@
 # Required-Stop:
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: data collector for Treasure Data
-# Description:       Treasure Data Support <support@treasure-data.com>
+# Short-Description: data collector for Athenahealth FLuentd
+# Description:       athenahealth Support <support@athenahealth.com>
 ### END INIT INFO
 
 # Author: Kazuki Ohta <k@treasure-data.com>

@@ -53,7 +53,7 @@ update_conffile() {
     fi
 
     # 2011/11/13 Kazuki Ohta <k@treasure-data.com>
-    # Before td-agent v1.1.0, fluentd has a bug of loading plugin before
+    # Before athena-fluentd v1.1.0, fluentd has a bug of loading plugin before
     # changing to the right user. Then, these directories were created with
     # root permission. The following lines fix that problem.
     if [ -d "/var/log/<%= project_name %>/buffer/" ]; then

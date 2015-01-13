@@ -1,9 +1,10 @@
-name "td"
+name "athena-fluentd-ui"
 #version '' # git ref
 
-dependency "td-agent-files"
+dependency "fluentd-ui"
+dependency "athena-fluentd-files"
 
-# for 'td' command
+# for 'athena-fluentd-ui' command
 
 build do
   block do
@@ -18,16 +19,15 @@ build do
     template = -> (*parts) { File.join('templates', *parts) }
     generate_from_template = -> (dst, src, erb_binding, opts={}) {
       mode = opts.fetch(:mode, 0755)
-      destination = dst.gsub('td-agent', project.name)
+      destination = dst.gsub('athena-fluentd', project.name)
       FileUtils.mkdir_p File.dirname(destination)
       File.open(destination, 'w', mode) do |f|
         f.write ERB.new(File.read(src)).result(erb_binding)
       end
     }
 
-    # setup td and td-agent scripts
-    td_bin_path = File.join(install_path, 'usr', 'bin', 'td')
-    # templates/usr/bin/td.erb -> INSTALL_PATH/usr/bin/td
-    generate_from_template.call td_bin_path, template.call('usr', 'bin', 'td.erb'), binding, mode: 0755
+    sbin_path = File.join(install_path, 'usr', 'sbin', 'athena-fluentd-ui')
+    # templates/usr/sbin/yyyy.erb -> INSTALL_PATH/usr/sbin/yyyy
+    generate_from_template.call sbin_path, template.call('usr', 'sbin', "athena-fluentd-ui.erb"), binding, mode: 0755
   end
 end

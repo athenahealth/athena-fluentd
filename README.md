@@ -1,10 +1,10 @@
 # About
 
-The event collector daemon, for Treasure Data. This daemon collects various types of logs/events via various way, and transfer them to the cloud. For more about Treasure Data, see the [homepage](http://treasuredata.com/), and the [documentation](http://docs.treasuredata.com/).
+The event collector daemon, for Athenahealth Fluentd. This daemon collects various types of logs/events via various way, and transfer them to the cloud.
 
-td-agent is open sourced as [Fluentd project](http://github.com/fluent/). In other words, td-agent is a distribution package of Fluentd.
+athena-fluentd is open sourced as [Fluentd project](http://github.com/fluent/). In other words, athena-fluentd is a distribution package of Fluentd.
 
-td-agent package is based on [Omnibus-ruby](https://github.com/opscode/omnibus-ruby)
+athena-fluentd package is based on [Omnibus-ruby](https://github.com/opscode/omnibus-ruby)
 
 ## Installation
 
@@ -28,15 +28,15 @@ $ bin/gem_downloader plugin_gems.rb
 Create required directory and add permission
 
 ```shell
-$ sudo mkdir -p /opt/td-agent /var/cache/omnibus
-$ sudo chown [USER] /opt/td-agent
+$ sudo mkdir -p /opt/athena-fluentd /var/cache/omnibus
+$ sudo chown [USER] /opt/athena-fluentd
 $ sudo chown [USER] /var/cache/omnibus
 ```
 
 After that, you create a platform-specific package using the `build project` command:
 
 ```shell
-$ bin/omnibus build td-agent2
+$ bin/omnibus build athena-fluentd
 ```
 
 The platform/architecture type of the package created will match the platform
@@ -54,7 +54,7 @@ $ bin/omnibus clean
 ```
 
 Adding the `--purge` purge option removes __ALL__ files generated during the
-build including the project install directory (`/opt/td-agent`) and
+build including the project install directory (`/opt/athena-fluentd`) and
 the package cache directory (`/var/cache/omnibus/pkg`):
 
 ```shell
@@ -79,23 +79,23 @@ Follow steps below to build packages with customized gem lists, configuration fi
   * `rm plugin_gems/*`
   * `bin/gem_downloader your_plugin_gems.rb`
 2. make your default configuration file
-  * edit `templates/etc/td-agent/td-agent.conf` and `td-agent.conf.tmpl`
-3. copy `config/projects/td-agent2.rb` to `config/projects/YOUR_PACKAGE_NAME.rb`
+  * edit `templates/etc/athena-fluentd/athena-fluentd.conf` and `athena-fluentd.conf.tmpl`
+3. copy `config/projects/athena-fluentd.rb` to `config/projects/YOUR_PACKAGE_NAME.rb`
 4. edit `config/projects/YOUR_PACKAGE_NAME.rb`
   * fix `name`, `maintainer`, `homepage` and `description`
   * change `install_dir` as `/opt/YOUR_PACKAGE_NAME`
   * change `build_version` and `build_iteration`
-  * comment out `td` and `td-agent-ui` if you want not to install them
+  * comment out `athena-fluentd-ui` if you want not to install them
 5. build package by `bin/omnibus build YOUR_PACKAGE_NAME`
 6. test your package file
 
-Build script generates file paths with `YOUR_PACKAGE_NAME`, from templates. Leave file names with `td-agent` in `templates`.
+Build script generates file paths with `YOUR_PACKAGE_NAME`, from templates. Leave file names with `athena-fluentd` in `templates`.
 
 NOTE: edit `project_name` in Vagrantfile if required.
 
 ## Vagrant-based Virtualized Build Lab
 
-td-agent omnibus ships will a project-specific [Berksfile](http://berkshelf.com/) and [Vagrantfile](http://www.vagrantup.com/)
+athena-fluentd omnibus ships will a project-specific [Berksfile](http://berkshelf.com/) and [Vagrantfile](http://www.vagrantup.com/)
 that will allow you to build your projects on the following platforms:
 
 * CentOS 5 64-bit
@@ -212,10 +212,10 @@ section:
 
 ```shell
 $ bundle exec kitchen login default-ubuntu-1204
-[vagrant@ubuntu...] $ cd td-agent
+[vagrant@ubuntu...] $ cd athena-fluentd
 [vagrant@ubuntu...] $ bundle install
 [vagrant@ubuntu...] $ ...
-[vagrant@ubuntu...] $ ./bin/omnibus build td-agent2
+[vagrant@ubuntu...] $ ./bin/omnibus build athena-fluentd
 ```
 
 For a complete list of all commands and platforms, run `kitchen list` or
