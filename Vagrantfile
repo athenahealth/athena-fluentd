@@ -11,7 +11,7 @@ host_project_path = File.expand_path('..', __FILE__)
 guest_project_path = "/home/vagrant/#{File.basename(host_project_path)}"
 project_name = 'athena-fluentd'
 host_name = "#{project_name}-omnibus-build-lab"
-bootstrap_chef_version = '11.12.4'
+bootstrap_chef_version = '11.16.0'
 
 Vagrant.configure('2') do |config|
   #config.vm.hostname = "#{project_name}-omnibus-build-lab"
@@ -45,7 +45,7 @@ Vagrant.configure('2') do |config|
 
       c.vm.box = "opscode-#{platform}"
       c.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_#{platform}_chef-provisionerless.box"
-      c.omnibus.chef_version = chef_version
+      config.omnibus.chef_version = chef_version
       c.vm.provider :virtualbox do |vb|
         # Give enough horsepower to build without taking all day.
         vb.customize [
@@ -63,6 +63,12 @@ Vagrant.configure('2') do |config|
       config.ssh.forward_agent = true
       config.vm.synced_folder '.', '/vagrant', :id => 'vagrant-root', :nfs => use_nfs
       config.vm.synced_folder host_project_path, guest_project_path, :nfs => use_nfs
+
+      if Vagrant.has_plugin?("vagrant-cachier")
+        config.cache.auto_detect = true
+        config.cache.scope = :machine
+        config.omnibus.cache_packages = true
+      end
 
       c.vm.provision :chef_solo do |chef|
         chef.synced_folder_type = "nfs" if use_nfs
