@@ -1,0 +1,13 @@
+/var/log/athena-fluentd/athena-fluentd.log {
+  daily
+  rotate 30
+  compress
+  delaycompress
+  notifempty
+  create 644 athena-fluentd athena-fluentd
+  sharedscripts
+  postrotate
+    pid=/var/run/athena-fluentd/athena-fluentd.pid
+    test -s $pid && kill -USR1 "$(cat $pid)"
+  endscript
+}

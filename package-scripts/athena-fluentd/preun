@@ -1,0 +1,12 @@
+# 2011/02/21 Kazuki Ohta <k@treasure-data.com>
+# Just leave this file, because this line could delete athena-fluentd.conf in a
+# *UPGRADE* process :-(
+# if [ -e "/etc/prelink.conf.d/athena-fluentd-ruby.conf" ]; then
+#   echo "Uninstalling /etc/prelink.conf.d/athena-fluentd-ruby.conf ..."
+#   rm -f /etc/prelink.conf.d/athena-fluentd-ruby.conf
+# fi
+if [ $1 = 0 ] ; then
+  echo "Stopping athena-fluentd ..."
+  /sbin/service athena-fluentd stop >/dev/null 2>&1 || :
+  /sbin/chkconfig --del athena-fluentd
+fi

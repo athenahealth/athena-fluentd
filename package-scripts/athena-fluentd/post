@@ -1,0 +1,84 @@
+athena_fluentd_dir=/opt/athena-fluentd
+
+echo "adding 'athena-fluentd' group..."
+getent group athena-fluentd >/dev/null || /usr/sbin/groupadd -r athena-fluentd
+echo "adding 'athena-fluentd' user..."
+getent passwd athena-fluentd >/dev/null || \
+  /usr/sbin/useradd -r -g athena-fluentd -d /var/lib/athena-fluentd -s /sbin/nologin -c 'athena-fluentd' athena-fluentd
+
+if [ ! -e "/var/log/athena-fluentd/" ]; then
+  mkdir -p /var/log/athena-fluentd/
+fi
+chown -R athena-fluentd:athena-fluentd /var/log/athena-fluentd/
+
+if [ ! -e "/var/run/athena-fluentd/" ]; then
+  mkdir -p /var/run/athena-fluentd/
+fi
+chown -R athena-fluentd:athena-fluentd /var/run/athena-fluentd/
+
+if [ ! -e "/etc/athena-fluentd/" ]; then
+  mkdir -p /etc/athena-fluentd/
+  mkdir -p /etc/athena-fluentd/plugin
+fi
+if [ ! -e "/etc/athena-fluentd/athena-fluentd.conf" ]; then
+  echo "Installing default conffile..."
+  cp -f ${athena_fluentd_dir}/etc/athena-fluentd/athena-fluentd.conf.tmpl /etc/athena-fluentd/athena-fluentd.conf
+fi
+
+# 2011/11/13 Kazuki Ohta <k@treasure-data.com>
+# This prevents prelink, to break the Ruby intepreter.
+if [ -d "/etc/prelink.conf.d/" ]; then
+  echo "prelink detected. Installing /etc/prelink.conf.d/athena-fluentd-ruby.conf ..."
+  cp -f ${athena_fluentd_dir}/etc/athena-fluentd/prelink.conf.d/athena-fluentd.conf /etc/prelink.conf.d/athena-fluentd-ruby.conf
+elif [ -f "/etc/prelink.conf" ]; then
+  if [ $(grep '\-b ${athena_fluentd_dir}/embedded/bin/ruby' -c /etc/prelink.conf) -eq 0 ]; then
+    echo "prelink detected, but /etc/prelink.conf.d/ dosen't exist. Adding /etc/prelink.conf ..."
+    echo "-b ${athena_fluentd_dir}/embedded/bin/ruby" >> /etc/prelink.conf
+  fi
+fi
+
+# 2013/03/04 Kazuki Ohta <k@treasure-data.com>
+# Install log rotation script.
+if [ -d "/etc/logrotate.d/" ]; then
+  cp -f ${athena_fluentd_dir}/etc/athena-fluentd/logrotate.d/athena-fluentd.logrotate /etc/logrotate.d/athena-fluentd
+fi
+
+# 2011/11/13 Kazuki Ohta <k@treasure-data.com>
+# Before athena-fluentd v1.1.0, fluentd has a bug of loading plugin before changing
+# to the right user. Then, these directories were created with root permission.
+# The following lines fix that problem.
+if [ ! -e "/var/log/athena-fluentd/buffer/" ]; then
+  mkdir -p /var/log/athena-fluentd/buffer/
+fi
+if [ -d "/var/log/athena-fluentd/buffer/" ]; then
+  chown -R athena-fluentd:athena-fluentd /var/log/athena-fluentd/buffer/
+fi
+if [ ! -e "/tmp/athena-fluentd/" ]; then
+  mkdir -p /tmp/athena-fluentd/
+fi
+if [ -d "/tmp/athena-fluentd/" ]; then
+  chown -R athena-fluentd:athena-fluentd /tmp/athena-fluentd/
+fi
+
+cp -f ${athena_fluentd_dir}/etc/init.d/athena-fluentd /etc/init.d/athena-fluentd
+cp -f ${athena_fluentd_dir}/usr/sbin/athena-fluentd /usr/sbin/athena-fluentd
+chmod 755 /usr/sbin/athena-fluentd
+cp -f ${athena_fluentd_dir}/usr/sbin/athena-fluentd-gem /usr/sbin/athena-fluentd-gem
+chmod 755 /usr/sbin/athena-fluentd-gem
+if [ -f ${athena_fluentd_dir}/usr/sbin/athena-fluentd-ui ]; then
+    cp -f ${athena_fluentd_dir}/usr/sbin/athena-fluentd-ui /usr/sbin/athena-fluentd-ui
+    chmod 755 /usr/sbin/athena-fluentd-ui
+fi
+if [ -f ${athena_fluentd_dir}/usr/bin/td ]; then
+    cp -f ${athena_fluentd_dir}/usr/bin/td /usr/bin/td
+    chmod 755 /usr/bin/td
+fi
+
+echo "Configure athena-fluentd to start, when booting up the OS..."
+/sbin/chkconfig --add athena-fluentd
+
+# 2011/03/24 Kazuki Ohta <k@treasure-data.com>
+# When upgrade, restart agent if it's launched
+if [ "$1" = "2" ]; then
+  /sbin/service athena-fluentd condrestart >/dev/null 2>&1 || :
+fi
