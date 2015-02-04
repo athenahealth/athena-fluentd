@@ -8,7 +8,7 @@ homepage "http://athenahealth.com"
 description "Athenahealth Fluentd and plugins"
 
 install_dir     "/opt/athena-fluentd"
-build_version   "1.0.2"
+build_version   "1.0.3"
 build_iteration 0
 
 # creates required build directories
