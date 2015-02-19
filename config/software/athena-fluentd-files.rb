@@ -41,7 +41,7 @@ build do
     if ['pkg', 'dmg'].include?(pkg_type)
       # templates/athena-fluentd.plist.erb -> INSTALL_PATH/athena-fluentd.plist
       plist_path = File.join(install_path, "athena-fluentd.plist")
-      generate_from_template.call plist_path, template.call("athena-fluentd.plist.erb")
+      generate_from_template.call plist_path, template.call("athena-fluentd.plist.erb"), binding, mode: 0755
     else
       # templates/etc/init.d/xxxx/athena-fluentd -> ./resources/etc/init.d/athena-fluentd
       initd_file_path = File.join(project.resources_path, 'etc', 'init.d', project.name)
