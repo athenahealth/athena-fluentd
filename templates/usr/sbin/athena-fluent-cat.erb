@@ -1,0 +1,4 @@
+#!<%= install_path %>/embedded/bin/ruby
+ENV["GEM_HOME"]="<%= install_path %>/embedded/lib/ruby/gems/<%= gem_dir_version %>/"
+ENV["GEM_PATH"]="<%= install_path %>/embedded/lib/ruby/gems/<%= gem_dir_version %>/"
+load "<%= install_path %>/embedded/bin/fluent-cat"

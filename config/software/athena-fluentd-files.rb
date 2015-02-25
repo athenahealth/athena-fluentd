@@ -54,7 +54,7 @@ build do
       generate_from_template.call conf_path, template.call('etc', 'athena-fluentd', *([item].flatten)), binding, mode: 0644
     }
 
-    ["athena-fluentd", "athena-fluentd-gem"].each { |command|
+    ["athena-fluentd", "athena-fluentd-gem", "athena-fluent-cat"].each { |command|
       sbin_path = File.join(install_path, 'usr', 'sbin', command)
       # templates/usr/sbin/yyyy.erb -> INSTALL_PATH/usr/sbin/yyyy
       generate_from_template.call sbin_path, template.call('usr', 'sbin', "#{command}.erb"), binding, mode: 0755
